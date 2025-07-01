@@ -1,7 +1,3 @@
-Below is the updated version of the General Serial Protocol (GSP) README with detailed field explanations added to the Data Transfer Layer (DTL) section, aligning with the style used in other sections (e.g., Command Frame and Response Frame). The explanations provide clarity on the purpose and behavior of each field, maintaining consistency with the existing documentation structure.
-
----
-
 # General Serial Protocol (GSP)
 
 ## Document Info
