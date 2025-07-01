@@ -2,16 +2,33 @@
 name = "gsp-toolkit"
 version = "0.0.1"
 description = "Host-side SDK & CLI for the General Serial Protocol"
-authors = [{name = "Mahmoud Abdelraouf"}]
+readme = "README.md"
+authors = [
+  { name = "Mahmoud Abdelraouf" }
+]
 requires-python = ">=3.9"
-dependencies = ["pyserial>=3.5", "typer>=0.9", "PyYAML>=6.0"]
+dependencies = [
+  "pyserial>=3.5",
+  "typer>=0.9",
+  "PyYAML>=6.0",
+  "argcomplete>=3.1.1",
+  "rich>=13.0",
+  "prompt_toolkit>=3.0"        
+]
 
 [project.scripts]
 gsp = "cli.main:app"
 
 [build-system]
-requires = ["setuptools>=67", "wheel"]
+requires = [
+  "setuptools>=67",
+  "wheel"
+]
 build-backend = "setuptools.build_meta"
 
+[tool.setuptools]
+package-dir = {"" = "src"}
+
 [tool.setuptools.packages.find]
+where = ["src"]
 include = ["gsp_toolkit", "cli"]

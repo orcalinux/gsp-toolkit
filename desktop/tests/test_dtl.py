@@ -1,7 +1,7 @@
 # desktop/tests/test_dtl.py
 
 import pytest
-from gsp_toolkit.dtl import encode_frame, decode_frame
+from src.gsp_toolkit.dtl import encode_frame, decode_frame
 
 def test_roundtrip_without_crc():
     cmd = b'\x01\x02\x03'

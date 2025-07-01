@@ -1,7 +1,7 @@
 # desktop/tests/test_slip.py
 
 import pytest
-from gsp_toolkit.slip import encode, decode, _END, _ESC, _ESC_END, _ESC_ESC
+from src.gsp_toolkit.slip import encode, decode, _END, _ESC, _ESC_END, _ESC_ESC
 
 def test_encode_wraps_with_end():
     data = b"ABC"
