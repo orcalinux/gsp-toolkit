@@ -1,9 +1,0 @@
-Metadata-Version: 2.4
-Name: gsp-toolkit
-Version: 0.0.1
-Summary: Host-side SDK & CLI for the General Serial Protocol
-Author: Mahmoud Abdelraouf
-Requires-Python: >=3.9
-Requires-Dist: pyserial>=3.5
-Requires-Dist: typer>=0.9
-Requires-Dist: PyYAML>=6.0
