@@ -1,36 +1,25 @@
-# Byte-compiled / cache files
+# .gitignore at repo root
+# cache/bytecode
 __pycache__/
 *.py[cod]
-*$py.class
 
-# Virtual environments
+# virtual envs
 .venv/
-venv/
-env/
-ENV/
 
-# Distribution / packaging
+# build artifacts
 build/
 dist/
 *.egg-info/
 .eggs/
 pip-wheel-metadata/
 
-# pytest
+# test cache
 .pytest_cache/
 
-# Local config override (user-specific)
-.gsp.yaml
-
-# IDE / editor settings
+# IDE/user files
 .vscode/
 .idea/
-*.swp
-*.swo
-
-# macOS
 .DS_Store
 
-# Logs
-*.log
-logs/
+# local overrides
+.gsp.yaml
