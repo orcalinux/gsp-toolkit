@@ -1,19 +1,15 @@
 # desktop/gsp_toolkit/transport/tcp.py
 
 import socket
-from .uart import _END  # reuse the SLIP END delimiter
+
+_END = 0xC0
 
 class TCPTransport:
     """
     TCP-based transport for GSP frames.
-    Frames are sent raw (SLIP-wrapped) and read back until the SLIP END delimiter.
+    Reads a full SLIP-wrapped frame (with leading+trailing END) from a socket.
     """
     def __init__(self, host: str, port: int, timeout: float = None):
-        """
-        :param host:    Remote hostname or IP
-        :param port:    Remote TCP port
-        :param timeout: Optional socket timeout in seconds
-        """
         self.sock = socket.create_connection((host, port), timeout)
 
     def send(self, frame: bytes) -> None:
@@ -22,16 +18,20 @@ class TCPTransport:
 
     def recv_frame(self) -> bytes:
         """
-        Read bytes one at a time until SLIP END (0xC0) is received.
-        Returns the full frame (including END).
+        Read bytes until we've seen two END (0xC0) delimiters:
+        first marks frame start, second marks frame end.
+        Returns the complete frame (including both ENDs).
         """
         buf = bytearray()
-        while True:
+        ends_seen = 0
+
+        while ends_seen < 2:
             b = self.sock.recv(1)
             if not b:
-                # connection closed
+                # Connection closed or timeout; return what we have
                 break
-            buf += b
-            if b == bytes([_END]):
-                break
+            buf.append(b[0])
+            if b[0] == _END:
+                ends_seen += 1
+
         return bytes(buf)
