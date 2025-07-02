@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+# src/gsp_cli/commands/write.py
+
 import os
 import typer
 from typer import Context, Argument, Option
@@ -12,6 +13,7 @@ from prompt_toolkit.styles import Style
 
 from gsp_core.config import load_config
 from gsp_core.client.highlevel import GSPClient, GSPTimeout
+from gsp_core.protocol.codec import Priority
 
 # Register custom Rich styles
 theme = Theme({
@@ -28,10 +30,19 @@ def write(
         None, "-i", "--interactive", help="Interactive prompts for write"
     ),
     file: str = Argument(None, help="Path to binary file"),
+    priority: Priority = Option(
+        Priority.NORMAL,
+        "--priority", "-P",
+        case_sensitive=False,
+        help="Command priority (LOW, NORMAL, HIGH, CRITICAL)"
+    ),
     port: str = Option("", "-p", "--port", help="Serial port"),
     baud: int = Option(None, "-b", "--baud", help="Baud rate override"),
     timeout: float = Option(None, "-t", "--timeout", help="I/O timeout override (s)"),
 ):
+    """
+    Upload a firmware image in 256-byte chunks, sending each chunk with the given priority.
+    """
     # late-import to break circular dependency
     from gsp_cli.main import _get_transport
 
@@ -103,7 +114,7 @@ def write(
             for i in range(0, len(data), 256):
                 chunk = data[i : i + 256]
                 try:
-                    client.write_chunk(chunk)
+                    client.write_chunk(chunk, priority)
                 except GSPTimeout as e:
                     error_offset = i
                     error_msg    = str(e)
@@ -119,6 +130,7 @@ def write(
         raise typer.Exit(1)
 
     console.print("[success]Upload complete![/success]")
+
 
 if __name__ == "__main__":
     typer.run(write)

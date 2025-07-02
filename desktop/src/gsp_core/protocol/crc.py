@@ -1,4 +1,4 @@
-# desktop/gsp_core/crc.py
+# src/gsp_core/protocol/crc.py
 
 """Flexible CRC-16 engine supporting CCITT-False and Genibus variants."""
 

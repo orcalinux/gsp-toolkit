@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+# src/gsp_cli/main.py
+
 import sys
 import glob
 import argcomplete

@@ -1,4 +1,4 @@
-# desktop/gsp_core/slip.py
+# src/gsp_core/protocol/slip.py
 
 _END     = 0xC0
 _ESC     = 0xDB

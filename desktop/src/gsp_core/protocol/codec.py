@@ -1,4 +1,5 @@
-# codec.py
+# src/gsp_core/protocol/codec.py
+
 from dataclasses import dataclass
 from enum import IntEnum
 from struct import pack, unpack_from
@@ -21,9 +22,9 @@ class CommandFrame:
 
     def build(self) -> bytes:
         """Builds a CRA command frame (no SLIP!)."""
-        # Flags: reserved=0, AF=0 (command), priority=low/normal/…
+        # Flags: reserved=0, AF=0 (command), priority=0-3
         flags = (0 << 3) | (0 << 2) | (self.priority & 0x03)
-        # <BBBH = sid, flags, cmd, payload_len (little-endian)
+        # <BBBH = sid, flags, cmd, payload_len (LE)
         header = pack("<BBBH", self.sid, flags, self.cmd, len(self.payload))
         return header + self.payload
 
@@ -32,7 +33,7 @@ class AckFrame:
     sid: int
 
     def build(self) -> bytes:
-        """Builds an ACK-only frame (fixed 3 bytes, no payload)."""
+        """Builds an ACK-only frame (3 bytes, no payload)."""
         # Flags: reserved=0, AF=1 (ACK), priority=0
         flags = (0 << 3) | (1 << 2) | 0
         return pack("<BBB", self.sid, flags, 0x00)  # sid, flags, cmd=0x00
@@ -57,7 +58,7 @@ def parse_frame(buf: bytes) -> Tuple[str, Dict[str, Any]]:
     # Command or response
     if len(buf) < 5:
         raise ValueError("missing length field")
-    length = unpack_from("<H", buf, 3)[0]
+    length  = unpack_from("<H", buf, 3)[0]
     payload = buf[5:]
     if length != len(payload):
         raise ValueError(f"length mismatch: expected {length}, got {len(payload)}")

@@ -1,4 +1,4 @@
-# desktop/gsp_core/transport/uart.py
+# src/gsp_core/transport/uart.py
 
 import serial
 

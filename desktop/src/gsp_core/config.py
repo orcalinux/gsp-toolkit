@@ -1,3 +1,5 @@
+# src/gsp_core/config.py
+
 import os
 from pathlib import Path
 import yaml

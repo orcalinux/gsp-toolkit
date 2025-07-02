@@ -1,4 +1,4 @@
-# desktop/gsp_core/events.py
+# src/gsp_core/events.py
 
 from typing import Callable, Any, List
 
