@@ -1,6 +1,6 @@
 import pytest
 
-from gsp_core.protocol.codec import CommandFrame, AckFrame, parse_frame, Priority
+from gsp_core.protocol.cra import CommandFrame, AckFrame, parse_frame, Priority
 
 
 def test_command_frame_build_basic():

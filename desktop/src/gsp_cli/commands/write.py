@@ -13,7 +13,7 @@ from prompt_toolkit.styles import Style
 
 from gsp_core.config import load_config
 from gsp_core.client.highlevel import GSPClient, GSPTimeout
-from gsp_core.protocol.codec import Priority
+from gsp_core.protocol.cra import Priority
 
 # Register custom Rich styles
 theme = Theme({

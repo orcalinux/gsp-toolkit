@@ -9,7 +9,7 @@ from rich.prompt import Prompt
 from rich.theme import Theme
 
 from gsp_core.config import load_config
-from gsp_core.protocol.codec import Priority
+from gsp_core.protocol.cra import Priority
 from gsp_core.client.highlevel import GSPClient, GSPTimeout
 
 # Register custom Rich styles

@@ -1,4 +1,4 @@
-# src/gsp_core/protocol/codec.py
+# src/gsp_core/protocol/cra.py
 
 from dataclasses import dataclass
 from enum import IntEnum

@@ -1,7 +1,7 @@
 # src/gsp_core/client/highlevel.py
 
 from typing import Optional, Any
-from gsp_core.protocol.codec import CommandFrame, parse_frame, Priority
+from gsp_core.protocol.cra import CommandFrame, parse_frame, Priority
 from gsp_core.protocol.slip import encode, decode
 from gsp_core.events import publish
 from gsp_core.config import load_config
