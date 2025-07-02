@@ -1,4 +1,4 @@
-# src/gsp_toolkit/ports.py
+# src/gsp_core/ports.py
 
 from serial.tools import list_ports
 from typing import List, Tuple

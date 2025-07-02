@@ -10,9 +10,8 @@ from prompt_toolkit import prompt as pt_prompt
 from prompt_toolkit.completion import PathCompleter
 from prompt_toolkit.styles import Style
 
-from gsp_toolkit.config import load_config
-from gsp_toolkit.highlevel import GSPClient, GSPTimeout
-from cli.main import _get_transport
+from gsp_core.config import load_config
+from gsp_core.client.highlevel import GSPClient, GSPTimeout
 
 # Register custom Rich styles
 theme = Theme({
@@ -33,13 +32,14 @@ def write(
     baud: int = Option(None, "-b", "--baud", help="Baud rate override"),
     timeout: float = Option(None, "-t", "--timeout", help="I/O timeout override (s)"),
 ):
-    """
-    Upload a firmware image in 256-byte chunks.
-    When in interactive mode, will prompt for any missing arguments (with TAB-completion).
-    """
-    global_i = ctx.find_root().obj.get("interactive", False)
+    # late-import to break circular dependency
+    from gsp_cli.main import _get_transport
+
+    # determine interactive flag
+    global_i   = ctx.find_root().obj.get("interactive", False)
     interactive = interactive if interactive is not None else global_i
 
+    # prompt for file if needed
     if interactive and not file:
         console.print(
             Panel(
@@ -57,27 +57,36 @@ def write(
             "scrollbar.button":                   "bg:#888888",
         })
         prompt_text = f"{os.getcwd()} > Path to binary file: "
-        file = pt_prompt(
-            prompt_text,
-            completer=PathCompleter(expanduser=True),
-            style=completion_style,
-            complete_in_thread=True,
-        )
+        try:
+            file = pt_prompt(
+                prompt_text,
+                completer=PathCompleter(expanduser=True),
+                style=completion_style,
+                complete_in_thread=True,
+            )
+        except KeyboardInterrupt:
+            console.print()  # newline
+            raise typer.Exit()
 
+    # ensure we have a file
     if not file:
         console.print("[error]No file specified.[/error]")
         raise typer.Exit(1)
 
+    # clean up path
     file = file.strip().strip("'\"")
     file = os.path.expanduser(file)
 
-    cfg = load_config()
-    baud = baud or cfg["serial"]["baudrate"]
+    # load config defaults
+    cfg     = load_config()
+    baud    = baud    or cfg["serial"]["baudrate"]
     timeout = timeout or cfg["serial"]["timeout"]
 
+    # set up transport and client
     transport = _get_transport(port, baud, timeout, interactive)
-    client = GSPClient(transport)
+    client    = GSPClient(transport)
 
+    # read data
     try:
         data = open(file, "rb").read()
     except Exception as e:
@@ -85,26 +94,31 @@ def write(
         raise typer.Exit(1)
 
     error_offset = None
-    error_msg = ""
-    with Progress() as prog:
-        task = prog.add_task("[info]Uploading…[/info]", total=len(data))
-        for i in range(0, len(data), 256):
-            chunk = data[i : i + 256]
-            try:
-                client.write_chunk(chunk)
-            except GSPTimeout as e:
-                error_offset = i
-                error_msg = str(e)
-                break
-            prog.update(task, advance=len(chunk))
+    error_msg    = ""
 
+    # upload with progress, handle Ctrl+C
+    try:
+        with Progress() as prog:
+            task = prog.add_task("[info]Uploading…[/info]", total=len(data))
+            for i in range(0, len(data), 256):
+                chunk = data[i : i + 256]
+                try:
+                    client.write_chunk(chunk)
+                except GSPTimeout as e:
+                    error_offset = i
+                    error_msg    = str(e)
+                    break
+                prog.update(task, advance=len(chunk))
+    except KeyboardInterrupt:
+        console.print()  # newline
+        raise typer.Exit()
+
+    # report any error_offset
     if error_offset is not None:
-        # ensure it's on its own line, then exit
         console.print(f"\n[error]Write failed at offset {error_offset}: {error_msg}[/error]")
         raise typer.Exit(1)
 
     console.print("[success]Upload complete![/success]")
-
 
 if __name__ == "__main__":
     typer.run(write)

@@ -1,4 +1,4 @@
-# desktop/gsp_toolkit/dtl.py
+# desktop/gsp_core/dtl.py
 
 from typing import Tuple
 from .slip import encode, decode

@@ -3,13 +3,13 @@
 import os
 import sys
 
-# Ensure the `desktop/` directory is on sys.path so we can import gsp_toolkit
+# Ensure the `desktop/` directory is on sys.path so we can import gsp_core
 repo_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 src_path  = os.path.join(repo_root, "src")
 sys.path.insert(0, src_path)
 
 import pytest
-from gsp_toolkit.events import subscribe, publish, clear_subscribers
+from gsp_core.events import subscribe, publish, clear_subscribers
 
 def test_publish_and_subscribe():
     clear_subscribers()

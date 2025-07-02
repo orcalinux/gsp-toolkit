@@ -1,4 +1,4 @@
-# desktop/gsp_toolkit/transport/tcp.py
+# desktop/gsp_core/transport/tcp.py
 
 import socket
 

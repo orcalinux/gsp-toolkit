@@ -13,11 +13,12 @@ dependencies = [
   "PyYAML>=6.0",
   "argcomplete>=3.1.1",
   "rich>=13.0",
-  "prompt_toolkit>=3.0"        
+  "prompt_toolkit>=3.0"
 ]
 
 [project.scripts]
-gsp = "cli.main:app"
+# now points at the renamed CLI package
+gsp = "gsp_cli.main:app"
 
 [build-system]
 requires = [
@@ -27,8 +28,8 @@ requires = [
 build-backend = "setuptools.build_meta"
 
 [tool.setuptools]
-package-dir = {"" = "src"}
+package-dir = { "" = "src" }
 
 [tool.setuptools.packages.find]
-where = ["src"]
-include = ["gsp_toolkit", "cli"]
+where   = ["src"]
+include = ["gsp_core", "gsp_cli"]

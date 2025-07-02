@@ -2,7 +2,7 @@
 
 import pytest
 import serial
-from src.gsp_toolkit.transport.uart import UARTTransport
+from src.gsp_core.transport.uart import UARTTransport
 
 END = 0xC0
 

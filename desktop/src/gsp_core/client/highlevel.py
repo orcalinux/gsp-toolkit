@@ -1,10 +1,10 @@
-# src/gsp_toolkit/highlevel.py
+# src/gsp_core/highlevel.py
 
 from typing import Optional, Any
-from .codec import CommandFrame, parse_frame
-from .slip import encode, decode
-from .events import publish
-from .config import load_config
+from gsp_core.protocol.codec import CommandFrame, parse_frame
+from gsp_core.protocol.slip import encode, decode
+from gsp_core.events import publish
+from gsp_core.config import load_config
 
 _OK_STATUS = 0x00
 
