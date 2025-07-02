@@ -1,4 +1,4 @@
-# src/gsp_cli/commands/erase.py
+# src/gsp_cli/commands/bootloader_ops/erase.py
 
 import os
 import typer
@@ -38,7 +38,7 @@ def erase(
     timeout: float = Option(None, "-t", "--timeout", help="I/O timeout override (s)"),
 ):
     # Late‐import to break circular dependency:
-    from gsp_cli.main import _get_transport
+    from gsp_cli.transport import get_transport
 
     # Determine interactive mode
     global_i   = ctx.find_root().obj.get("interactive", False)
@@ -81,7 +81,7 @@ def erase(
     baud    = baud    or cfg["serial"]["baudrate"]
     timeout = timeout or cfg["serial"]["timeout"]
 
-    transport = _get_transport(port, baud, timeout, interactive)
+    transport = get_transport(port, baud, timeout, interactive)
     client    = GSPClient(transport)
 
     try:

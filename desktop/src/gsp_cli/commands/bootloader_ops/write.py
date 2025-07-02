@@ -1,4 +1,4 @@
-# src/gsp_cli/commands/write.py
+# src/gsp_cli/commands/bootloader_ops/write.py
 
 import os
 import typer
@@ -44,7 +44,7 @@ def write(
     Upload a firmware image in 256-byte chunks, sending each chunk with the given priority.
     """
     # late-import to break circular dependency
-    from gsp_cli.main import _get_transport
+    from gsp_cli.transport import get_transport
 
     # determine interactive flag
     global_i   = ctx.find_root().obj.get("interactive", False)
@@ -94,7 +94,7 @@ def write(
     timeout = timeout or cfg["serial"]["timeout"]
 
     # set up transport and client
-    transport = _get_transport(port, baud, timeout, interactive)
+    transport = get_transport(port, baud, timeout, interactive)
     client    = GSPClient(transport)
 
     # read data

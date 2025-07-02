@@ -56,7 +56,7 @@ desktop/
 │       │   └── tcp.py       # TCP transport
 │       ├── slip.py          # SLIP encoding/decoding
 │       ├── crc.py           # CRC-16/CCITT-False
-│       ├── codec.py         # GSP frame builder/parser
+│       ├── cra.py           # GSP frame builder/parser
 │       ├── dtl.py           # Data Transfer Layer
 │       ├── events.py        # publish/subscribe hooks
 │       └── highlevel.py     # `GSPClient` with retries & timeouts
